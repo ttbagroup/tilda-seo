@@ -1,0 +1,34 @@
+{
+  "name": "@ttbagroup/tilda-seo",
+  "version": "1.0.0",
+  "description": "SEOify tilda output by markdown insertions",
+  "main": "index.js",
+  "scripts": {
+    "test": "budo test",
+    "build": "browserify test.js | indexhtmlify | metadataify | github-cornerify > demo/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ttbagroup/tilda-seo.git"
+  },
+  "keywords": [
+    "tilda",
+    "seo",
+    "markdown"
+  ],
+  "author": "Dima Yv <df.creative@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ttbagroup/tilda-seo/issues"
+  },
+  "homepage": "https://github.com/ttbagroup/tilda-seo#readme",
+  "dependencies": {
+    "enable-mobile": "^1.0.7",
+    "object-assign": "^4.1.1"
+  },
+  "devDependencies": {
+    "github-cornerify": "^1.0.7",
+    "indexhtmlify": "^1.3.1",
+    "metadataify": "^1.0.3"
+  }
+}
