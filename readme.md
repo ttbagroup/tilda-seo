@@ -3,12 +3,7 @@
 Formats tilda output so to make title tags semantic.
 
 ```js
-let seoify = require('tilda-seo')({
-	h1: '#',
-	h2: '##',
-	h3: '###',
-	...
-})
+let seoify = require('tilda-seo')()
 
 tildaSrc = seoify(tildaSrc)
 ```
