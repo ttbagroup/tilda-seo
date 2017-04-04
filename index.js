@@ -2,7 +2,10 @@
 
 const extend = require('object-assign')
 
-module.exports = function Seoify (opts) {
+module.exports = function Seoify (opts = {}) {
+	opts = extend({
+		holder: '.t-title, .t-descr, .t-name'
+	}, opts)
 
 	return function seoify (str) {
 		let container = document.createElement('div')
@@ -26,26 +29,28 @@ module.exports = function Seoify (opts) {
 
 		return container.innerHTML
 	}
-}
 
+	function processNode(textNode, regex, tag) {
+		if (regex.test(textNode.nodeValue)) {
+			let titleEl = textNode.parentNode.matches(opts.holder) ? textNode.parentNode : textNode.parentNode.closest(opts.holder)
+			if (titleEl) {
+				//remove # from inner content
+				textNode.nodeValue = textNode.nodeValue.replace(regex, '')
+				console.log(textNode)
 
-function processNode(textNode, regex, tag) {
-	if (regex.test(textNode.nodeValue)) {
-		let titleEl = textNode.parentNode.closest('.t-title')
-		if (titleEl) {
-			//remove # from inner content
-			textNode.nodeValue = textNode.nodeValue.replace(regex, '')
+				//rename closest .t-title tag to h1
+				let el = document.createElement(tag)
+				el.innerHTML = titleEl.innerHTML;
+				copyAttributes(titleEl, el)
+				titleEl.parentNode.replaceChild(el, titleEl)
 
-			//rename closest .t-title tag to h1
-			let el = document.createElement(tag)
-			el.innerHTML = titleEl.innerHTML;
-			copyAttributes(titleEl, el)
-			titleEl.parentNode.replaceChild(el, titleEl)
-
-			return true
+				return true
+			}
 		}
 	}
 }
+
+
 
 function copyAttributes (from, to) {
 	// Grab all of the original's attributes, and pass them to the replacement
