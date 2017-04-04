@@ -33,7 +33,7 @@ font-size:1rem;
 `
 
 let desc = `
-# is h1<br/> ## is h2<br/> ### is h3<br/> See <a href="https://en.wikipedia.org/wiki/Markdown">markdown</a>
+# is h1<br/> ## is h2<br/> ### is h3<br/> #### is h4<br/> ##### is h5<br/> ###### is h6<br/> See <a href="https://en.wikipedia.org/wiki/Markdown">markdown</a>
 `
 let descEl = document.body.appendChild(document.createElement('p'))
 descEl.innerHTML = desc
@@ -45,7 +45,7 @@ btn.addEventListener('click', () => {
 	btn.innerHTML = 'Seoify'
 
 	descEl.innerHTML = seoify.count + ' entries processed, just copy and paste to prose.io'
-	// setTimeout(() => {
-	// 	descEl = desc
-	// }, 3000)
+	setTimeout(() => {
+		descEl = desc
+	}, 10000)
 })
