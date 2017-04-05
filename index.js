@@ -42,7 +42,8 @@ module.exports = function Seoify (opts = {}) {
 				let el = document.createElement(tag)
 				el.innerHTML = titleEl.innerHTML;
 				copyAttributes(titleEl, el)
-				titleEl.parentNode.replaceChild(el, titleEl)
+
+				titleEl.replaceWith(el)
 
 				return true
 			}
