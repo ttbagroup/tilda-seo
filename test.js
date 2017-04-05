@@ -47,5 +47,5 @@ btn.addEventListener('click', () => {
 	descEl.innerHTML = seoify.count + ' entries processed, just copy and paste to prose.io'
 	setTimeout(() => {
 		descEl = desc
-	}, 10000)
+	}, 8000)
 })

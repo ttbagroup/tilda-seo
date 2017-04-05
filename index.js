@@ -4,7 +4,8 @@ const extend = require('object-assign')
 
 module.exports = function Seoify (opts = {}) {
 	opts = extend({
-		holder: '.t-title, .t-descr, .t-name'
+		holder: '.t-title, .t-descr, .t-name',
+		inlineHolder: 'strong, em'
 	}, opts)
 
 	return function seoify (str) {
@@ -32,18 +33,37 @@ module.exports = function Seoify (opts = {}) {
 
 	function processNode(textNode, regex, tag) {
 		if (regex.test(textNode.nodeValue)) {
-			let titleEl = textNode.parentNode.matches(opts.holder) ? textNode.parentNode : textNode.parentNode.closest(opts.holder)
+			let inline = false
+			let titleEl = textNode.parentNode.matches(opts.inlineHolder) ? textNode.parentNode : null
+
+			if (!titleEl) {
+				titleEl = textNode.parentNode.matches(opts.holder) ? textNode.parentNode : textNode.parentNode.closest(opts.holder)
+			}
+			else {
+				inline = true
+			}
+
 			if (titleEl) {
 				//remove # from inner content
 				textNode.nodeValue = textNode.nodeValue.replace(regex, '')
-				console.log(textNode)
 
-				//rename closest .t-title tag to h1
+				//force inline display if inline holder
+				if (inline) {
+					let style = getComputedStyle(titleEl)
+					if (!/inline/.test(style.display)) {
+						titleEl.style.display = 'inline';
+					}
+				}
+
+				//rename closest holder tag to proper header
 				let el = document.createElement(tag)
 				el.innerHTML = titleEl.innerHTML;
 				copyAttributes(titleEl, el)
 
+				console.log(inline ? 'inline' : 'block', tag, textNode)
+
 				titleEl.replaceWith(el)
+
 
 				return true
 			}
