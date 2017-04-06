@@ -44,7 +44,12 @@ btn.addEventListener('click', () => {
 	textarea.select()
 	btn.innerHTML = 'Seoify'
 
-	descEl.innerHTML = seoify.count + ' entries processed, just copy and paste to prose.io'
+	if (seoify.count) {
+		descEl.innerHTML = seoify.count + ' entries processed, just copy and paste to prose.io'
+	}
+	else {
+		descEl.innerHTML = 'No SEO-entries found'
+	}
 	setTimeout(() => {
 		descEl = desc
 	}, 8000)

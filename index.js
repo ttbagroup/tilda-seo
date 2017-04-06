@@ -5,11 +5,16 @@ const extend = require('object-assign')
 module.exports = function Seoify (opts = {}) {
 	opts = extend({
 		holder: '.t-title, .t-descr, .t-name',
-		inlineHolder: 'strong, em'
+		inlineHolder: 'strong, em, span'
 	}, opts)
 
 	return function seoify (str) {
-		let container = document.createElement('div')
+		let container = document.body.appendChild(document.createElement('div'))
+		container.style.cssText = `
+			position: absolute;
+			left: 100vw;
+			top: 0;
+		`
 
 		container.innerHTML = str
 
@@ -27,6 +32,8 @@ module.exports = function Seoify (opts = {}) {
 		})
 
 		seoify.count = count || 0
+
+		document.body.removeChild(container)
 
 		return container.innerHTML
 	}
@@ -53,10 +60,12 @@ module.exports = function Seoify (opts = {}) {
 					if (!/inline/.test(style.display)) {
 						titleEl.style.display = 'inline';
 					}
-					titleEl.style.fontSize = style.fontSize;
-					titleEl.style.fontStyle = style.fontStyle;
-					titleEl.style.fontWeight = style.fontWeight;
-					titleEl.style.textTransform = style.textTransform;
+					if (titleEl.style.fontSize != style.fontSize) titleEl.style.fontSize = style.fontSize;
+					if (titleEl.style.fontStyle != style.fontStyle) titleEl.style.fontStyle = style.fontStyle;
+					if (titleEl.style.fontWeight != style.fontWeight) titleEl.style.fontWeight = style.fontWeight;
+					if (titleEl.style.fontVariant != style.fontVariant) titleEl.style.fontVariant = style.fontVariant;
+					if (titleEl.style.textTransform != style.textTransform) titleEl.style.textTransform = style.textTransform;
+					console.log(titleEl, style.fontSize)
 				}
 
 				//rename closest holder tag to proper header
