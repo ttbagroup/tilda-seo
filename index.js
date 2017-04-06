@@ -1,10 +1,15 @@
 'use strict'
 
 const extend = require('object-assign')
+const fs = require('fs')
+const insertCss = require('insert-styles');
+
+
+insertCss(fs.readFileSync(__dirname + '/tilda.css', 'utf-8'));
 
 module.exports = function Seoify (opts = {}) {
 	opts = extend({
-		holder: '.t-title, .t-descr, .t-name',
+		holder: '[class*="title"], .t-descr, .t-name',
 		inlineHolder: 'strong, em, span'
 	}, opts)
 
@@ -40,14 +45,28 @@ module.exports = function Seoify (opts = {}) {
 
 	function processNode(textNode, regex, tag) {
 		if (regex.test(textNode.nodeValue)) {
-			let inline = false
-			let titleEl = textNode.parentNode.matches(opts.inlineHolder) ? textNode.parentNode : null
+			let inline = textNode.parentNode.matches(opts.inlineHolder)
 
-			if (!titleEl) {
-				titleEl = textNode.parentNode.matches(opts.holder) ? textNode.parentNode : textNode.parentNode.closest(opts.holder)
+			let	titleEl = textNode.parentNode.matches(opts.holder) ? textNode.parentNode : textNode.parentNode.closest(opts.holder)
+
+			//inline may be conflicting
+			if (inline) {
+				//if no title found or title is too far from inline tag (more than 4 nested items) - rewrite inline
+				if (!titleEl || (
+					textNode.parentNode != titleEl &&
+					textNode.parentNode && textNode.parentNode.parentNode && textNode.parentNode.parentNode != titleEl &&
+					textNode.parentNode.parentNode.parentNode && textNode.parentNode.parentNode.parentNode != titleEl &&
+					textNode.parentNode.parentNode.parentNode.parentNode && textNode.parentNode.parentNode.parentNode.parentNode != titleEl
+					)
+				) {
+					titleEl = textNode.parentNode;
+				}
+				else {
+					inline = false
+				}
 			}
 			else {
-				inline = true
+				if (!titleEl) alert('Case is not resolved:', textNode.nodeValue)
 			}
 
 			if (titleEl) {
@@ -65,7 +84,6 @@ module.exports = function Seoify (opts = {}) {
 					if (titleEl.style.fontWeight != style.fontWeight) titleEl.style.fontWeight = style.fontWeight;
 					if (titleEl.style.fontVariant != style.fontVariant) titleEl.style.fontVariant = style.fontVariant;
 					if (titleEl.style.textTransform != style.textTransform) titleEl.style.textTransform = style.textTransform;
-					console.log(titleEl, style.fontSize)
 				}
 
 				//rename closest holder tag to proper header
