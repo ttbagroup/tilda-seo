@@ -53,6 +53,10 @@ module.exports = function Seoify (opts = {}) {
 					if (!/inline/.test(style.display)) {
 						titleEl.style.display = 'inline';
 					}
+					titleEl.style.fontSize = style.fontSize;
+					titleEl.style.fontStyle = style.fontStyle;
+					titleEl.style.fontWeight = style.fontWeight;
+					titleEl.style.textTransform = style.textTransform;
 				}
 
 				//rename closest holder tag to proper header
