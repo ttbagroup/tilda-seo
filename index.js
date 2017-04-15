@@ -9,7 +9,7 @@ insertCss(fs.readFileSync(__dirname + '/tilda.css', 'utf-8'));
 
 module.exports = function Seoify (opts = {}) {
 	opts = extend({
-		holder: '[class*="title"], .t-descr, .t-name',
+		holder: '[class*="title"], [class*="text"], .t-descr, .t-name',
 		inlineHolder: 'strong, em, span'
 	}, opts)
 
