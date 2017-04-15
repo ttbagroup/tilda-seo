@@ -51,6 +51,6 @@ btn.addEventListener('click', () => {
 		descEl.innerHTML = 'No SEO-entries found'
 	}
 	setTimeout(() => {
-		descEl = desc
+		descEl.innerHTML = desc
 	}, 8000)
 })
