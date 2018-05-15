@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "budo test",
-    "build": "browserify test.js | indexhtmlify | metadataify | github-cornerify > demo/index.html"
+    "build": "browserify test.js | indexhtmlify | metadataify | github-cornerify > index.html"
   },
   "repository": {
     "type": "git",
