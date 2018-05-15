@@ -4,8 +4,9 @@ const extend = require('object-assign')
 const fs = require('fs')
 const insertCss = require('insert-styles');
 
-
 insertCss(fs.readFileSync(__dirname + '/tilda.css', 'utf-8'));
+
+const badNodes = {style: true, script: true, iframe: true, object: true, pre: true, code: true}
 
 module.exports = function Seoify (opts = {}) {
 	opts = extend({
@@ -28,12 +29,15 @@ module.exports = function Seoify (opts = {}) {
 		let count = 0
 
 		textNodes.forEach((textNode) => {
-			if (processNode(textNode, /^\s*#\s+/, 'h1')) count++
-			if (processNode(textNode, /^\s*##\s+/, 'h2')) count++
-			if (processNode(textNode, /^\s*###\s+/, 'h3')) count++
-			if (processNode(textNode, /^\s*####\s+/, 'h4')) count++
-			if (processNode(textNode, /^\s*#####\s+/, 'h5')) count++
-			if (processNode(textNode, /^\s*######\s+/, 'h6')) count++
+			// ignore bad nodes
+			if (textNode.parentNode && badNodes[textNode.parentNode.nodeName.toLowerCase()]) return
+
+			if (processNode(textNode, /^\s*#\s*\b/, 'h1')) count++
+			if (processNode(textNode, /^\s*##\s*\b/, 'h2')) count++
+			if (processNode(textNode, /^\s*###\s*\b/, 'h3')) count++
+			if (processNode(textNode, /^\s*####\s*\b/, 'h4')) count++
+			if (processNode(textNode, /^\s*#####\s*\b/, 'h5')) count++
+			if (processNode(textNode, /^\s*######\s*\b/, 'h6')) count++
 		})
 
 		seoify.count = count || 0
@@ -66,7 +70,7 @@ module.exports = function Seoify (opts = {}) {
 				}
 			}
 			else {
-				if (!titleEl) alert('Case is not resolved:', textNode.nodeValue)
+				if (!titleEl) console.warn('Case is not resolved:', textNode.nodeValue)
 			}
 
 			if (titleEl) {
